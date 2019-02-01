@@ -11,8 +11,6 @@ class App extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.analyzeFace = this.analyzeFace.bind(this);
   }
-  componentDidMount() {}
-
   onChange(e) {
     this.setState({
       input: e.target.value
@@ -24,6 +22,7 @@ class App extends React.Component {
       .post("/face", { input: input })
       .then(res => {
         console.log("successfully analyzed face");
+        console.log('this is the res after analyzing the face: ', res)
       })
       .catch(err => {
         console.error("error analyzing face\n", err);
@@ -36,8 +35,9 @@ class App extends React.Component {
         <h1>Welcome to Moodify</h1>
         <div>
           <h4>Analyze Faces</h4>
-          Paste link to human face: <input value={this.state.input} onChange={this.onChange} />
-          <button onClick={this.analyzeFace}> Find Playlists! </button>
+          Paste link to human face:{" "}
+          <input value={this.state.input} onChange={this.onChange} />
+          <button onClick={this.analyzeFace(this.state.input)}> Find Playlists! </button>
         </div>
       </div>
     );
