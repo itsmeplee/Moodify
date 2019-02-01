@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
 
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(express.static(__dirname + '/../client/dist'));
 
 //key is available for only 7 days
 const subscriptionKey = "5b10a5db469247c59121f3fc4752d4a3";
@@ -31,15 +32,15 @@ const options = {
   }
 };
 
-request.post(options, (error, response, body) => {
-  if (error) {
-    console.log("Error: ", error);
-    return;
-  }
-  let jsonResponse = JSON.stringify(JSON.parse(body), null, "  ");
-  console.log("JSON Response\n");
-  console.log(jsonResponse);
-});
+// request.post(options, (error, response, body) => {
+//   if (error) {
+//     console.log("Error: ", error);
+//     return;
+//   }
+//   let jsonResponse = JSON.stringify(JSON.parse(body), null, "  ");
+//   console.log("JSON Response\n");
+//   console.log(jsonResponse);
+// });
 
 app.listen(port, () => {
   console.log("Listening on port: ", port);
