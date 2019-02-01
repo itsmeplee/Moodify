@@ -1,0 +1,19 @@
+{
+  "name": "moodify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsmeplee/Moodify.git"
+  },
+  "author": "Paul Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itsmeplee/Moodify/issues"
+  },
+  "homepage": "https://github.com/itsmeplee/Moodify#readme"
+}
