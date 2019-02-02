@@ -6,15 +6,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      emotions: [],     
       input: ""
     };
-    this.onChange = this.onChange.bind(this);
-    this.analyzeFace = this.analyzeFace.bind(this);
-  }
-  onChange(e) {
-    this.setState({
-      input: e.target.value
-    });
   }
 
   analyzeFace(input) {
@@ -22,7 +16,7 @@ class App extends React.Component {
       .post("/face", { input: input })
       .then(res => {
         console.log("successfully analyzed face");
-        console.log('this is the res after analyzing the face: ', res)
+        console.log('this is the res after analyzing the face: ', res.data)
       })
       .catch(err => {
         console.error("error analyzing face\n", err);
@@ -36,8 +30,8 @@ class App extends React.Component {
         <div>
           <h4>Analyze Faces</h4>
           Paste link to human face:{" "}
-          <input value={this.state.input} onChange={this.onChange} />
-          <button onClick={this.analyzeFace(this.state.input)}> Find Playlists! </button>
+          <input value={this.state.input} onChange={(e) => {this.setState({input: e.target.value})}} />
+          <button onClick={() => {this.analyzeFace(this.state.input)}}> Find Playlists! </button>
         </div>
       </div>
     );

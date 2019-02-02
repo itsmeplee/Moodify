@@ -23,9 +23,7 @@ const params = {
 };
 
 app.post("/face", (req, res) => {
-  //do the request post within here after changing the url to the req.body
   const input = req.body.input;
-  console.log('this is the input: ', input)
   const options = {
     uri: uriBase,
     qs: params,
@@ -43,7 +41,8 @@ app.post("/face", (req, res) => {
     let jsonResponse = JSON.stringify(JSON.parse(body), null, "  ");
     console.log("JSON Response\n");
     console.log(jsonResponse);
-    console.log('this is the body \n', body)
+    // console.log('this is the body \n', body)
+    res.send(JSON.parse(body))
   });
 });
 
