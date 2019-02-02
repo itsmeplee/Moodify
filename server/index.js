@@ -13,8 +13,6 @@ app.use(express.static(__dirname + "/../client/dist"));
 const subscriptionKey = "5b10a5db469247c59121f3fc4752d4a3";
 const uriBase =
   "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
-// const imageUrl =
-//   "https://upload.wikimedia.org/wikipedia/commons/3/37/Dagestani_man_and_woman.jpg";
 
 const params = {
   returnFaceId: "true",
@@ -23,6 +21,8 @@ const params = {
 };
 
 app.post("/face", (req, res) => {
+  let strongestEmotion = null;
+  let highestEmotionValue = 0;
   const input = req.body.input;
   const options = {
     uri: uriBase,
@@ -39,10 +39,15 @@ app.post("/face", (req, res) => {
       return;
     }
     let jsonResponse = JSON.stringify(JSON.parse(body), null, "  ");
-    console.log("JSON Response\n");
-    console.log(jsonResponse);
-    // console.log('this is the body \n', body)
-    res.send(JSON.parse(body))
+    let parsedBody = JSON.parse(body);
+    let emotions = parsedBody[0]['faceAttributes']['emotion']
+    for (var key in emotions) {
+        if (emotions[key] > highestEmotionValue) {
+            highestEmotionValue = emotions[key];
+            strongestEmotion = key;
+        }
+    }
+    res.send(strongestEmotion);
   });
 });
 
