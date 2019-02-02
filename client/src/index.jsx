@@ -7,7 +7,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       emotion: '',
-      input: ""
+      input: "",
+      playlists: []
     };
   }
 
@@ -24,6 +25,20 @@ class App extends React.Component {
       .catch(err => {
         console.error("error analyzing face\n", err);
       });
+  }
+
+  searchPlaylists(mood) {
+      axios.post("/search", {emotion: mood})
+      .then(res => {
+          console.log("successfully searched playlists");
+          console.log(res.data['playlists']['items']);
+          this.setState({
+              playlists: res.data['playlists']['items']
+          })
+      })
+      .catch(err => {
+          console.error("error getting playlists\n", err);
+      })
   }
 
   render() {
@@ -51,6 +66,16 @@ class App extends React.Component {
             src={this.state.input}
           />
           <h2>This person is {this.state.emotion}</h2>
+        </div>
+        <div>
+            <button onClick={() => {this.searchPlaylists(this.state.emotion)}}>Search for Playlists</button>
+        </div>
+        <div>
+            <ul>
+                {this.state.playlists.map((playlist) => {
+                    return <li><a href={playlist.external_urls.spotify}>{playlist.name}</a></li>
+                })}
+            </ul>
         </div>
       </div>
     );

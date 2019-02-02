@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index.js",
-    "react": "webpack -p --watch"
+    "react": "webpack -d --watch"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
+    "node-spotify-api": "^1.0.7",
     "nodemon": "^1.18.9",
     "request": "^2.88.0",
     "style-loader": "^0.23.1",

@@ -2,7 +2,8 @@ const express = require("express");
 const axios = require("axios");
 const request = require("request");
 const bodyParser = require("body-parser");
-const spotifycredentials = require('../spotifycredentials.js')
+const spotifycredentials = require("../spotifycredentials.js");
+const Spotify = require("node-spotify-api");
 
 const app = express();
 const port = 3000;
@@ -10,45 +11,16 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/../client/dist"));
 
-var client_id = spotifycredentials.clientId; // Your client id
-var client_secret = spotifycredentials.clientSecret; // Your secret
-
-// your application requests authorization
-var authOptions = {
-  url: 'https://accounts.spotify.com/api/token',
-  headers: {
-    'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-  },
-  form: {
-    grant_type: 'client_credentials'
-  },
-  json: true
-};
-
-//accesses spotify API
-request.post(authOptions, function(error, response, body) {
-  if (!error && response.statusCode === 200) {
-
-    // use the access token to access the Spotify Web API
-    var token = body.access_token;
-    var options = {
-      url: 'https://api.spotify.com/v1/users/m4sm12t7iypz8vih14eami7hw',
-      headers: {
-        'Authorization': 'Bearer ' + token
-      },
-      json: true
-    };
-    request.get(options, function(error, response, body) {
-      console.log(body);
-    });
-  }
+var spotify = new Spotify({
+  id: spotifycredentials.clientId,
+  secret: spotifycredentials.clientSecret
 });
 
 app.post("/face", (req, res) => {
   let strongestEmotion = null;
   let highestEmotionValue = 0;
   const input = req.body.input;
-  //key is available for only 7 days
+  //subscription key is available for only 7 days
   const subscriptionKey = "5b10a5db469247c59121f3fc4752d4a3";
   const uriBase =
     "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
@@ -82,6 +54,18 @@ app.post("/face", (req, res) => {
     }
     res.send(strongestEmotion);
   });
+});
+
+app.post("/search", (req, res) => {
+  const emotion = req.body.emotion;
+  spotify.search({type: 'playlist', query: emotion, limit: 10}, (err, data) => {
+      if (err) {
+          console.error('error searching spotify playlists: ', err);
+      } else {
+          console.log('this is the data: ', data);
+          res.send(data)
+      }
+  })
 });
 
 app.listen(port, () => {
